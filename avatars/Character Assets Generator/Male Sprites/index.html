@@ -64,7 +64,7 @@
             {
               var body = new Image()
               body.onload = function() {
-                ctx.drawImage(body, offsetX, offsetY)
+                redraw()
               }
               body.src = 'Human%20Male%20Body%20' + bodyIndex + '.png'
             }
@@ -72,7 +72,7 @@
             {
               var head = new Image()
               head.onload = function() {
-                ctx.drawImage(head, offsetX, offsetY)
+                redraw()
               }
               head.src = 'Human%20Male%20Head.png'
             }
@@ -80,7 +80,7 @@
             {
               var eyes = new Image()
               eyes.onload = function() {
-                ctx.drawImage(eyes, offsetX, offsetY)
+                redraw()
               }
               eyes.src = 'Human%20Male%20Eyes%20' + eyesIndex + '.png'
             }
@@ -88,9 +88,16 @@
             {
               var hair = new Image()
               hair.onload = function() {
-                ctx.drawImage(hair, offsetX, offsetY)
+                redraw()
               }
               hair.src = 'Human%20Male%20Hair%20' + hairIndex + '.png'
+            }
+
+            function redraw() {
+              ctx.drawImage(body, offsetX, offsetY)
+              ctx.drawImage(head, offsetX, offsetY)
+              ctx.drawImage(eyes, offsetX, offsetY)
+              ctx.drawImage(hair, offsetX, offsetY)
             }
           }
 
