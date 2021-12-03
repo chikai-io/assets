@@ -49,6 +49,7 @@
                     Hair:
                     <a href="#" onclick="changeHair(-1)">&lt;</a>
                     <a href="#" onclick="changeHair(1)">&gt;</a>
+                    <input type="range" min="0" max="360" value="0" step="1" id="hair-hue" onchange="setHairHue()">
                 </div>
                 <div>
                     Eyes:
@@ -64,16 +65,21 @@
                     Accessory:
                     <a href="#" onclick="changeAccessory(-1)">&lt;</a>
                     <a href="#" onclick="changeAccessory(1)">&gt;</a>
+                    <input type="range" min="0" max="360" value="0" step="1" id="accessory-hue"
+                           onchange="setAccessoryHue()">
                 </div>
                 <div>
                     Headwear:
                     <a href="#" onclick="changeHeadwear(-1)">&lt;</a>
                     <a href="#" onclick="changeHeadwear(1)">&gt;</a>
+                    <input type="range" min="0" max="360" value="0" step="1" id="headwear-hue"
+                           onchange="setHeadwearHue()">
                 </div>
                 <div>
                     Belt:
                     <a href="#" onclick="changeBelt(-1)">&lt;</a>
                     <a href="#" onclick="changeBelt(1)">&gt;</a>
+                    <input type="range" min="0" max="360" value="0" step="1" id="belt-hue" onchange="setBeltHue()">
                 </div>
             </div>
         </div>
@@ -90,12 +96,19 @@
           let eyesIndex = 1
           let mouthIndex = 1
           let bodyIndex = 1
+
           let hairIndex = 1
+          let hairHue = 0
+
           let beltIndex = 1
+          let beltHue = 0
 
           // optional
           let headwearIndex = 0
+          let headwearHue = 0
+
           let accessoryIndex = 0
+          let accessoryHue = 0
 
           let offsetX = 0
           let offsetY = 0
@@ -136,22 +149,30 @@
 
             ctx.clearRect(0, 0, width, height)
 
-            if (body)
-              ctx.drawImage(body, offsetX, offsetY)
-            if (head)
-              ctx.drawImage(head, offsetX, offsetY)
-            if (mouth)
-              ctx.drawImage(mouth, offsetX, offsetY)
-            if (eyes)
-              ctx.drawImage(eyes, offsetX, offsetY)
-            if (hair)
+            if (body) {ctx.drawImage(body, offsetX, offsetY)}
+            if (head) {ctx.drawImage(head, offsetX, offsetY)}
+            if (mouth) {ctx.drawImage(mouth, offsetX, offsetY)}
+            if (eyes) {ctx.drawImage(eyes, offsetX, offsetY)}
+            if (hair) {
+              ctx.filter = 'hue-rotate(' + hairHue + 'deg)'
               ctx.drawImage(hair, offsetX, offsetY)
-            if (headwear)
+              ctx.filter = 'hue-rotate(0deg)'
+            }
+            if (headwear) {
+              ctx.filter = 'hue-rotate(' + headwearHue + 'deg)'
               ctx.drawImage(headwear, offsetX, offsetY)
-            if (belt)
+              ctx.filter = 'hue-rotate(0deg)'
+            }
+            if (belt) {
+              ctx.filter = 'hue-rotate(' + beltHue + 'deg)'
               ctx.drawImage(belt, offsetX, offsetY)
-            if (accessory)
+              ctx.filter = 'hue-rotate(0deg)'
+            }
+            if (accessory) {
+              ctx.filter = 'hue-rotate(' + accessoryHue + 'deg)'
               ctx.drawImage(accessory, offsetX, offsetY)
+              ctx.filter = 'hue-rotate(0deg)'
+            }
           }
 
           function changeHead(value) {
@@ -205,6 +226,26 @@
           function changeBelt(change) {
             beltIndex += change
             if (beltIndex < 1) beltIndex = 1
+            draw()
+          }
+
+          function setHairHue() {
+            hairHue = window.document.getElementById('hair-hue').value
+            draw()
+          }
+
+          function setBeltHue() {
+            beltHue = window.document.getElementById('belt-hue').value
+            draw()
+          }
+
+          function setAccessoryHue() {
+            accessoryHue = window.document.getElementById('accessory-hue').value
+            draw()
+          }
+
+          function setHeadwearHue() {
+            headwearHue = window.document.getElementById('headwear-hue').value
             draw()
           }
 
