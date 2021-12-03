@@ -1,10 +1,25 @@
 <html>
     <head>
+        <title>Chikai Character Generator</title>
+        <style>
+            a {
+                text-decoration: none;
+                color: #111;
+            }
+        </style>
     </head>
     <body style="background-color: #0b2428; zoom: 3; font-family: Arial,serif">
         <div style="vertical-align: center; display: inline-block;">
-            <div style="display: inline-block">
-                <canvas id="stage" style="border: 1px solid black;"></canvas>
+            <h4 style="line-height: 20px">
+                <img src="../../logo/Symbol+Name%20-%20frame/chikai_logo_frame@2x.png" height="20px"/> Avatar Generator
+            </h4>
+
+            <div style="display: inline-block; width: 100px">
+                <canvas id="stage"></canvas>
+                <div style="padding-top: 10px">
+                    <button onclick="saveAvatar()">Save</button>
+                    <a id="link"></a>
+                </div>
             </div>
 
             <div style="display: inline-block; vertical-align: top;">
@@ -61,16 +76,11 @@
                     <a href="#" onclick="changeBelt(1)">&gt;</a>
                 </div>
             </div>
-
-            <div>
-                <button onclick="saveAvatar()">Save</button>
-                <a id="link"></a>
-            </div>
         </div>
 
         <script>
-          let height = 114
-          let width = 114
+          let height = 75
+          let width = 50
 
           let race = 'human'
           let gender = 'male'
@@ -87,8 +97,8 @@
           let headwearIndex = 0
           let accessoryIndex = 0
 
-          let offsetX = 30
-          let offsetY = 20
+          let offsetX = 0
+          let offsetY = 0
 
           let canvas = document.getElementById('stage')
           canvas.height = height
@@ -111,6 +121,10 @@
           }
 
           async function draw() {
+            if (gender === 'female')
+              offsetX = 10
+            else offsetX = 0
+
             var body = await loadImage(gender + '/body_' + bodyIndex + '.png')
             var head = await loadImage(gender + '/head_' + headIndex + '.png')
             var eyes = await loadImage(gender + '/eyes_' + eyesIndex + '.png')
@@ -120,7 +134,7 @@
             var mouth = await loadImage(gender + '/mouth_' + mouthIndex + '.png')
             var accessory = await loadImage(gender + '/accessory_' + accessoryIndex + '.png')
 
-            ctx.clearRect(0, 0, height, width)
+            ctx.clearRect(0, 0, width, height)
 
             if (body)
               ctx.drawImage(body, offsetX, offsetY)
