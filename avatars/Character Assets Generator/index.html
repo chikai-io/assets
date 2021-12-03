@@ -1,0 +1,207 @@
+<html>
+    <head>
+    </head>
+    <body style="background-color: #0b2428; zoom: 3; font-family: Arial,serif">
+        <div style="vertical-align: center; display: inline-block;">
+            <div style="display: inline-block">
+                <canvas id="stage" style="border: 1px solid black;"></canvas>
+            </div>
+
+            <div style="display: inline-block; vertical-align: top;">
+                <div>
+                    Gender:
+                    <label>
+                        <input type="radio" name="gender" checked onclick="changeGender('male')">
+                        Male
+                    </label>
+                    <label>
+                        <input type="radio" name="gender" onclick="changeGender('female')">
+                        Female
+                    </label>
+                </div>
+                <div>
+                    Race:
+                    <label>
+                        <input type="radio" name="race" checked onclick="changeHead(1)">
+                        Human
+                    </label>
+                    <label>
+                        <input type="radio" name="race" onclick="changeHead(2)">
+                        Alien
+                    </label>
+                </div>
+                <div>
+                    Hair:
+                    <a href="#" onclick="changeHair(-1)">&lt;</a>
+                    <a href="#" onclick="changeHair(1)">&gt;</a>
+                </div>
+                <div>
+                    Eyes:
+                    <a href="#" onclick="changeEyes(-1)">&lt;</a>
+                    <a href="#" onclick="changeEyes(1)">&gt;</a>
+                </div>
+                <div>
+                    Body:
+                    <a href="#" onclick="changeBody(-1)">&lt;</a>
+                    <a href="#" onclick="changeBody(1)">&gt;</a>
+                </div>
+                <div>
+                    Accessory:
+                    <a href="#" onclick="changeAccessory(-1)">&lt;</a>
+                    <a href="#" onclick="changeAccessory(1)">&gt;</a>
+                </div>
+                <div>
+                    Headwear:
+                    <a href="#" onclick="changeHeadwear(-1)">&lt;</a>
+                    <a href="#" onclick="changeHeadwear(1)">&gt;</a>
+                </div>
+                <div>
+                    Belt:
+                    <a href="#" onclick="changeBelt(-1)">&lt;</a>
+                    <a href="#" onclick="changeBelt(1)">&gt;</a>
+                </div>
+            </div>
+
+            <div>
+                <button onclick="saveAvatar()">Save</button>
+                <a id="link"></a>
+            </div>
+        </div>
+
+        <script>
+          let height = 114
+          let width = 114
+
+          let race = 'human'
+          let gender = 'male'
+
+          // mandatory
+          let headIndex = 1
+          let eyesIndex = 1
+          let mouthIndex = 1
+          let bodyIndex = 1
+          let hairIndex = 1
+          let beltIndex = 1
+
+          // optional
+          let headwearIndex = 0
+          let accessoryIndex = 0
+
+          let offsetX = 30
+          let offsetY = 20
+
+          let canvas = document.getElementById('stage')
+          canvas.height = height
+          canvas.width = width
+
+          let ctx = canvas.getContext('2d')
+          ctx.imageSmoothingEnabled = false
+
+          function loadImage(url) {
+            return new Promise(function(resolve) {
+              var img = new Image()
+              img.onload = function() {
+                resolve(img)
+              }
+              img.onerror = function() {
+                resolve(undefined)
+              }
+              img.src = url
+            })
+          }
+
+          async function draw() {
+            var body = await loadImage(gender + '/body_' + bodyIndex + '.png')
+            var head = await loadImage(gender + '/head_' + headIndex + '.png')
+            var eyes = await loadImage(gender + '/eyes_' + eyesIndex + '.png')
+            var hair = await loadImage(gender + '/hair_' + hairIndex + '.png')
+            var headwear = await loadImage(gender + '/headwear_' + headwearIndex + '.png')
+            var belt = await loadImage(gender + '/belt_' + beltIndex + '.png')
+            var mouth = await loadImage(gender + '/mouth_' + mouthIndex + '.png')
+            var accessory = await loadImage(gender + '/accessory_' + accessoryIndex + '.png')
+
+            ctx.clearRect(0, 0, height, width)
+
+            if (body)
+              ctx.drawImage(body, offsetX, offsetY)
+            if (head)
+              ctx.drawImage(head, offsetX, offsetY)
+            if (mouth)
+              ctx.drawImage(mouth, offsetX, offsetY)
+            if (eyes)
+              ctx.drawImage(eyes, offsetX, offsetY)
+            if (hair)
+              ctx.drawImage(hair, offsetX, offsetY)
+            if (headwear)
+              ctx.drawImage(headwear, offsetX, offsetY)
+            if (belt)
+              ctx.drawImage(belt, offsetX, offsetY)
+            if (accessory)
+              ctx.drawImage(accessory, offsetX, offsetY)
+          }
+
+          function changeHead(value) {
+            headIndex = value
+
+            if (value === 2) {
+              eyesIndex = 0
+              mouthIndex = 0
+            } else {
+              eyesIndex = 1
+              mouthIndex = 1
+            }
+            draw()
+          }
+
+          function changeGender(newGender) {
+            gender = newGender
+            draw()
+          }
+
+          function changeEyes(change) {
+            eyesIndex += change
+            if (eyesIndex < 0) eyesIndex = 0
+            draw()
+          }
+
+          function changeAccessory(change) {
+            accessoryIndex += change
+            if (accessoryIndex < 0) accessoryIndex = 0
+            draw()
+          }
+
+          function changeHeadwear(change) {
+            headwearIndex += change
+            if (headwearIndex < 0) headwearIndex = 0
+            draw()
+          }
+
+          function changeBody(change) {
+            bodyIndex += change
+            if (bodyIndex < 1) bodyIndex = 1
+            draw()
+          }
+
+          function changeHair(change) {
+            hairIndex += change
+            if (hairIndex < 0) hairIndex = 0
+            draw()
+          }
+
+          function changeBelt(change) {
+            beltIndex += change
+            if (beltIndex < 1) beltIndex = 1
+            draw()
+          }
+
+          function saveAvatar() {
+            var link = document.getElementById('link')
+            link.setAttribute('download', 'avatar.png')
+            link.setAttribute('href', canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream'))
+            link.click()
+          }
+
+          draw()
+        </script>
+    </body>
+</html>
